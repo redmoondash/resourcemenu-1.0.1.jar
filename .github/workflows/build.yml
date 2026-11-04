@@ -9,14 +9,14 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-      - name: Upload zip
-        run: unzip resourcemenu-1.21.11-src.zip
+      - name: Unzip
+        run: unzip resourcemenu-1.0.1.jar-main.zip
       - name: Build
         run: |
-          cd src/resourcemenu
+          cd "$(dirname "$(find . -name gradlew | head -n 1)")"
           chmod +x gradlew
           ./gradlew build
       - uses: actions/upload-artifact@v4
         with:
           name: resourcemenu-jar
-          path: src/resourcemenu/build/libs/*.jar
+          path: '**/build/libs/*.jar'
