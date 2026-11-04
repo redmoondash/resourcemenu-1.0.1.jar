@@ -1,0 +1,22 @@
+name: Build Mod
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Upload zip
+        run: unzip resourcemenu-1.21.11-src.zip
+      - name: Build
+        run: |
+          cd src/resourcemenu
+          chmod +x gradlew
+          ./gradlew build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resourcemenu-jar
+          path: src/resourcemenu/build/libs/*.jar
