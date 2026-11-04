@@ -10,13 +10,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Unzip
-        run: unzip resourcemenu-1.0.1.jar-main.zip
+        run: |
+          ZIP=$(find . -name "resourcemenu-1.0.1.jar-main.zip" -not -path "./.git/*" | head -n 1)
+          echo "Found: $ZIP"
+          unzip -o "$ZIP" -d extracted
       - name: Build
         run: |
-          cd "$(dirname "$(find . -name gradlew | head -n 1)")"
+          cd "$(dirname "$(find extracted -name gradlew | head -n 1)")"
           chmod +x gradlew
           ./gradlew build
       - uses: actions/upload-artifact@v4
         with:
           name: resourcemenu-jar
-          path: '**/build/libs/*.jar'
+          path: extracted/**/build/libs/*.jar
